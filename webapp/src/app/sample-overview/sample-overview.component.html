@@ -1,0 +1,40 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Sample Overview</mat-card-title>
+        <mat-card-subtitle>all available samples</mat-card-subtitle>
+    </mat-card-header>
+    <mat-list>
+        <mat-list-item>
+            <p> todo: Query input</p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-accordion *ngIf="samples.length == 0"> 
+                <mat-expansion-panel disabled>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            no samples yet
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <mat-accordion id="samples">
+                <mat-expansion-panel hideToggle *ngFor="let sample of samples">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{sample._id}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{sample.description}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <p>materials: {{sample.materials|json}}</p>
+                    <p>creation time: {{sample.creationTimestamp}}</p>
+                    <p>last edited: {{sample.lastEditedTimestamp}}</p>
+                    <button mat-button color="accent" (click)="editSample(sample)">Edit sample</button>
+                    <button mat-button color="accent" (click)="delete(sample._id)">Remove sample</button>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-list-item>
+    </mat-list>
+</mat-card>

@@ -1,0 +1,91 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Sample Set</mat-card-title>
+    <mat-card-subtitle>id: {{_id}}</mat-card-subtitle>
+    <mat-card-subtitle>created: {{sampleSetForm.value.creationTimestamp}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-list>
+    <mat-list-item>
+      <form [formGroup]="sampleSetForm">
+        <mat-form-field appearance="fill">
+          <mat-label>description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-chip-list">
+          <mat-chip-list #chipList aria-label="material selection">
+            <mat-chip *ngFor="let material of sampleSetForm.value.materials" [selectable]="selectable"
+              [removable]="removable" (removed)="remove(material)">
+              {{material.code_DIN_EN_10027}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="materials" [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+        </mat-form-field>
+      </form>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <form [formGroup]="sampleSetForm">
+        <p>associated samples</p>
+        <br>
+        <div *ngIf="sampleSetForm.value.associatedSamples !== null">
+        <mat-accordion *ngIf="sampleSetForm.value.associatedSamples.length == 0 ">
+          <mat-expansion-panel disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                no associated samples
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+        <mat-accordion>
+          <mat-expansion-panel hideToggle *ngFor="let sample of sampleSetForm.value.associatedSamples">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{sample}}
+              </mat-panel-title>
+              <!-- <mat-panel-description>
+                {{sample.description}}
+              </mat-panel-description>
+            <p>{{sample.measurements}}</p> -->
+          </mat-expansion-panel-header>
+            <button mat-button color="accent" (click)="editAssociatedSample(sample)">Edit sample</button>
+            <button mat-button color="accent" (click)="removeAssociatedSample(sample)">Remove sample from set</button>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <br>
+        <form [formGroup]="newAssociatedSampleForm">
+          <table class="example-full-width" cellspacing="0">
+            <tr></tr>
+            <td>
+              <mat-form-field>
+                <mat-label>sample id</mat-label>
+                <input matInput formControlName="_id">
+              </mat-form-field>
+              <td> <button mat-button color="primary" >Scan</button>
+            </td>
+            <td> <button mat-button color="accent" [disabled]="newAssociatedSampleForm.status != 'VALID'"
+                (click)="addNewAssociatedSample(newAssociatedSampleForm.value._id)">Add</button>
+            </td>
+          </table>
+        </form>
+      </form>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <section>
+        <div class="example-button-row">
+          <button mat-raised-button color="accent" [disabled]="sampleSetForm.status != 'VALID'" (click)="submit()">Save
+            sample set</button>
+          <button mat-raised-button color="accent">Delete sample set</button>
+        </div>
+      </section>
+    </mat-list-item>
+  </mat-list>
+  <p>{{sampleSetForm.value | json }}</p>
+  <p>{{sampleSetForm.status}}</p> 
+</mat-card>

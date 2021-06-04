@@ -1,0 +1,41 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Sample Set Overview</mat-card-title>
+        <mat-card-subtitle>all available sample sets</mat-card-subtitle>
+    </mat-card-header>
+    <mat-list>
+        <mat-list-item>
+            <p> todo: Query input</p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-accordion *ngIf="sampleSets.length == 0"> 
+                <mat-expansion-panel disabled>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            no associated samples
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <mat-accordion>
+                <mat-expansion-panel hideToggle *ngFor="let sampleSet of sampleSets">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{sampleSet._id}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{sampleSet.description}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <p>associated samples: {{sampleSet.associatedSamples}}<</p>
+                    <p>materials: {{sampleSet.materials|json}}</p>
+                    <p>creation time: {{sampleSet.creationTimestamp}}</p>
+                    <p>last edited: {{sampleSet.lastEditedTimestamp}}</p>
+                    <button mat-button color="accent" (click)="editSampleSet(sampleSet)">Edit sample</button>
+                    <button mat-button color="accent" (click)="deleteSampleSet(sampleSet._id)">Remove sample</button>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-list-item>
+    </mat-list>
+</mat-card>

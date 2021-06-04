@@ -1,0 +1,8 @@
+http://*:62029 {
+    root * /usr/src/app
+    encode zstd gzip
+    log
+    file_server
+
+    # reverse_proxy /api backend:33913
+}

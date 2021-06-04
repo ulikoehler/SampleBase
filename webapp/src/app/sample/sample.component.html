@@ -1,0 +1,158 @@
+<mat-card>
+
+  <!-- header with id and timestamp -->
+  <mat-card-header>
+    <mat-card-title>Sample</mat-card-title>
+    <mat-card-subtitle>id: {{_id}}</mat-card-subtitle>
+    <mat-card-subtitle>last save: {{sampleForm.value.creationTimestamp}}</mat-card-subtitle>
+    <!-- TODO creation vs. last time saved -->
+  </mat-card-header>
+
+
+  <!-- sampleForm, measurment table and associated files -->
+  <mat-list>
+    <mat-list-item>
+
+      <!-- sampleForm -->
+      <form [formGroup]="sampleForm">
+
+        <mat-form-field appearance="fill">
+          <mat-label>description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>status</mat-label>
+          <input matInput formControlName="status">
+        </mat-form-field>
+
+        <mat-form-field class="example-chip-list">
+          <mat-chip-list #chipList aria-label="material selection">
+            <mat-chip *ngFor="let material of sampleForm.value.materials" [selectable]="selectable"
+              [removable]="removable" (removed)="remove(material)">
+              {{material.code_DIN_EN_10027}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="materials" [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+        </mat-form-field>
+
+      </form>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <mat-list-item>
+
+    <!-- measurement table -->
+    <table mat-table [dataSource]="measurementDataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="measurement_identifier">
+        <th class="tab" mat-header-cell *matHeaderCellDef>identifier</th>
+        <td  class="tab" mat-cell *matCellDef="let element">
+          <input [(ngModel)]="element.measurement_identifier" ngDefaultControl matInput type="text">
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="measurement">
+        <th class="tab_measurement"  mat-header-cell *matHeaderCellDef> measurement </th>
+        <td  class="tab_measurement"mat-cell *matCellDef="let element">
+          <mat-select [(ngModel)]="element.measurement" ngDefaultControl>
+            <mat-option value="melt pool width">meltpool width</mat-option>
+            <mat-option value="melt pool depth">meltpool depth</mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="measurement_value">
+        <th class="tab" mat-header-cell *matHeaderCellDef> measured value </th>
+        <td class="tab" mat-cell *matCellDef="let element" [(ngModel)]="element.measurement_value" ngDefaultControl>
+          <input [(ngModel)]="element.measurement_value" matInput type="text">
+        </td>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="measurement_value_unit">
+        <th class="tab_unit" mat-header-cell *matHeaderCellDef> unit </th>
+        <td class="tab_unit" mat-cell *matCellDef="let element" >
+          <mat-select [(ngModel)]="element.measurement_value_unit" ngDefaultControl> 
+            <mat-option value="meter">meter</mat-option>
+          </mat-select>       
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="measurementColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: measurementColumns;"></tr>
+
+    </table>
+
+
+    </mat-list-item>
+
+    <mat-list-item>
+      <button (click)="addNewMeasurement()" >Add measurment</button>
+
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <!-- associated files -->
+    <mat-list-item>
+      <table mat-table [dataSource]="availableFiles" class="mat-elevation-z8">
+
+
+        <ng-container matColumnDef="originalname">
+          <th class="tab" mat-header-cell *matHeaderCellDef> originalname </th>
+          <td class="tab" mat-cell *matCellDef="let element"> {{element.originalname}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fileId">
+          <th class="fileId" mat-header-cell *matHeaderCellDef> fileId </th>
+          <td class="fileId" mat-cell *matCellDef="let element"> {{element.fileId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="download">
+          <th class="tab" mat-header-cell *matHeaderCellDef></th>
+          <td class="tab" mat-cell *matCellDef="let element">
+            <button (click)="download(element.fileId, element.originalname)">Download file</button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <mat-list-item>
+      <input (change)="setFile($event.target.files)" type="file" name="sampleFile" id="file">
+    </mat-list-item>
+    <mat-list-item>
+      <form>
+        <mat-form-field appearance="fill">
+          <mat-label>Set filename</mat-label>
+          <input matInput type="text" [(ngModel)]="originalname" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="accent" [disabled]="!originalname"
+          (click)="uploadFile(upload, originalname)">Upload file</button>
+      </form>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <section>
+        <div class="example-button-row">
+          <button mat-raised-button color="accent" [disabled]="sampleForm.status != 'VALID'" (click)="submit()">Save
+            sample</button>
+          <button mat-raised-button color="accent" (click)="delete(_id)">Delete sample</button>
+        </div>
+      </section>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+
+<p>{{this.sampleForm.value | json}}</p>

@@ -1,0 +1,15 @@
+
+<h2 mat-dialog-title>Are you sure to delete the sample {{_id}}?</h2>
+
+<p>Description: {{sample.description}}</p>
+
+<div *ngIf="sample.files.length>0">
+    <p>This will remove the associated files: {{files}}</p>
+</div>
+<p>
+    Moreover, this sample will be removed from the associated sample set.
+</p>
+<p>Please confirm by clicking "Delete"</p>
+
+<button mat-button (click)="onNoClick()">Cancel</button>
+<button mat-button color="accent" [mat-dialog-close]="true">Delete</button>
