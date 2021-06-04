@@ -1,0 +1,45 @@
+{
+  "name": "sample-base-backend",
+  "version": "0.0.1",
+  "description": "scientific management of sample data",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "./node_modules/.bin/tsc -b tsconfig.json",
+    "prod": "./node_modules/.bin/tsc -b tsconfig.json && node ./build/samplebase/app.js & cd ../webapp && ng serve --port 62029 --host 0.0.0.0 --disableHostCheck=true",
+    "build": "./node_modules/.bin/tsc -b tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.automated-testing.net/joshua_simon/sample_base.git"
+  },
+  "author": "Joshua Simon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.automated-testing.net/joshua_simon/sample_base/-/issues"
+  },
+  "homepage": "https://gitlab.automated-testing.net/joshua_simon/sample_base#readme",
+  "dependencies": {
+    "@angular-devkit/build-angular": "^12.0.1",
+    "@koa/cors": "^3.1.0",
+    "@koa/multer": "^3.0.0",
+    "@types/angular": "^1.8.0",
+    "@types/koa": "^2.11.6",
+    "child-process-promise": "^2.2.1",
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-jwt": "^4.0.1",
+    "koa-router": "^10.0.0",
+    "koa-send": "^5.0.1",
+    "koa-sendfile": "^3.0.0",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.10.14",
+    "multer": "^1.4.2",
+    "multer-gridfs-storage": "^4.2.0",
+    "stream": "0.0.2",
+    "typescript": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.10.0",
+    "ts-node-dev": "^1.0.0"
+  }
+}
